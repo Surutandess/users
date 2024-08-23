@@ -1,9 +1,8 @@
-from requests import Request
-
-from .auth import register_new_user, login_user, oauth2_scheme, get_current_user_depends
+from .auth import register_new_user, login_user, get_active_user
+from .depends import edit_one_user
 from fastapi import status, Form, APIRouter, Response, Depends
-from .schemas import UsersRead, UsersCreate, TokenRead
-from typing import Annotated
+from .schemas import UsersRead, UsersCreate, TokenRead, UsersEdit
+from .models import UsersORM
 
 
 user_router = APIRouter(
@@ -13,7 +12,7 @@ user_router = APIRouter(
 
 
 @user_router.post(
-    path="/",
+    path="/register/new/user/",
     response_model=UsersRead,
     status_code=status.HTTP_201_CREATED
 )
@@ -37,10 +36,23 @@ async def sign_in_user(
     return {"access_token": tokens[0], "refresh_token": tokens[1]}
 
 
+#should create endpoint for logout
+@user_router.post("/logout/")
+async def logout_user(response: Response, user: UsersORM = Depends(get_active_user)):
+    print(f"User with username {user.username} was logout")
+    response.delete_cookie(key="access_token", domain="localhost")
+    response.delete_cookie(key="refresh_token", domain="localhost")
+
+
 @user_router.get(
     path="/get/current/user/",
     response_model=UsersRead,
 )
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    one_user = await get_current_user_depends(token=token)
-    return one_user
+async def get_current_user(user: UsersORM = Depends(get_active_user)):
+    return user
+
+
+@user_router.patch(path="/edt/one/user/", response_model=UsersRead)
+async def edit_user(schemas: UsersEdit,user: UsersORM = Depends(get_active_user)):
+    user_edit = await edit_one_user(username=user.username, model=schemas)
+    return user_edit

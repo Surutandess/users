@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 from pathlib import Path
 
@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     auth: JWTModel = JWTModel()
     ADMIN_USERNAME: Optional[str] = None
     ADMIN_PASSWORD: Optional[str] = None
+    ADMIN_EMAIL: Optional[EmailStr] = None
     DB_URL: str
 
 
