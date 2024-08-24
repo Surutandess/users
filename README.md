@@ -4,20 +4,20 @@
 >Требование
  
     • Git
-    • Python 3.12 или выше
-
+    • Docker
+    • Docker compose
+    
 >Клонируем репозиторий куда удобно
 
     git clone https://github.com/Surutandess/users.git
->Установка нужных зависемостей для проекта
 
-    pip install poetry
-    poetry install
-> Для получения приватного ключа
+> Для получения приватного ключа обязательно в деректории certificates
+    
     openssl genrsa -out jwt-private.pem 2048
 
-> Для получения публичнего ключа
+> Для получения публичнего ключа обязательно в деректории certificates
+    
     openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem
->Запуск проекта
 
-    python3 main.py
+>Запуск проекта
+    docker compose up

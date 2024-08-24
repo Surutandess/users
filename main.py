@@ -18,4 +18,4 @@ async def docs_redirect():
     return RedirectResponse(url="/docs")
 
 if __name__ == '__main__':
-    uvicorn.run(app="main:app", reload=True)
+    uvicorn.run(app="main:app", reload=True, port=4000, host="0.0.0.0")
