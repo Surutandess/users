@@ -4,4 +4,4 @@ __pycache__
 .idea
 .env
 docker.env
-app.sh
+pg_data
