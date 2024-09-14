@@ -18,7 +18,7 @@ def encode_token(
     if expire_timedelta:
         expire = now + expire_timedelta
     else:
-        expire = now + timedelta(days=settings.auth.expire_access_token_minutes)
+        expire = now + timedelta(minutes=settings.auth.expire_access_token_minutes)
     to_encode.update(
         exp=expire,
         iat=now
